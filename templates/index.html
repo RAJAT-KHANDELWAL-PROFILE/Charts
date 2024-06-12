@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/static/background.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 28px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+            outline: none;
+        }
+        button[type="submit"], #download-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin: 0 auto;
+        }
+        button[type="submit"]:hover, #download-btn:hover {
+            background-color: #45a049;
+        }
+        #plot {
+            margin-top: 20px;
+            animation: slideUp 1s ease-in-out;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        function downloadPlot() {
+            var plotDiv = document.getElementById('plot');
+            Plotly.downloadImage(plotDiv, {format: 'png', filename: 'plot'});
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Visualization</h1>
+        <form action="/" method="POST">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+            <label for="x_label">X-axis Label:</label>
+            <input type="text" id="x_label" name="x_label">
+            <label for="y_label">Y-axis Label:</label>
+            <input type="text" id="y_label" name="y_label">
+            <label for="x_data">X-axis Data (comma-separated):</label>
+            <input type="text" id="x_data" name="x_data">
+            <label for="y_data">Y-axis Data (comma-separated):</label>
+            <input type="text" id="y_data" name="y_data">
+            <label for="plot_type">Select Plot Type:</label>
+            <select id="plot_type" name="plot_type">
+                <option value="bar">Bar Plot</option>
+                <option value="line">Line Plot</option>
+                <option value="scatter">Scatter Plot</option>
+            </select>
+            <button type="submit">Generate Plot</button>
+        </form>
+
+        {% if plot_div %}
+        <div id="plot">{{ plot_div|safe }}</div>
+        <button id="download-btn" onclick="downloadPlot()">Download Plot</button>
+        {% endif %}
+    </div>
+</body>
+</html>
